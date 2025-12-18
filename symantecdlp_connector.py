@@ -80,6 +80,8 @@ class SymantecDLPConnector(BaseConnector):
     ACTION_ID_UPDATE_INCIDENT = "update_incident"
     ACTION_ID_LIST_INCIDENTS = "list_incidents"
     ACTION_ID_GET_INCIDENT = "get_incident"
+    ACTION_ID_GET_LIST = "get_list"
+    ACTION_ID_UPDATE_LIST = "update_list"
     ACTION_ID_ON_POLL = "on_poll"
 
     def __init__(self):
@@ -709,6 +711,148 @@ class SymantecDLPConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_list(self, param):
+        self.save_progress(f"In action handler for : {self.get_action_identifier()}")
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        # Get parameters
+        endpoint = param.get(DLP_JSON_ENDPOINT)
+        list_id = self._validate_integers(action_result, param.get(DLP_JSON_LIST_ID), DLP_JSON_LIST_ID, allow_zero=True)
+
+        # Validate endpoint parameter is passed
+        if not endpoint:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a value for the parameter endpoint.")
+
+        if list_id is None:
+            return action_result.get_status()
+
+        # Build URL
+        config = self.get_config()
+        base_url = config[DLP_JSON_URL].strip("/")
+
+        if not endpoint.startswith("/"):
+            endpoint = f"/{endpoint}"
+
+        url = f"{base_url}{endpoint}/{list_id}"
+
+        # Make GET request call
+        try:
+            response = self._session.get(url, verify=self._verify, timeout=60)
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, f"Error connecting to server. {self._get_error_message_from_exception(e)}")
+
+        # Process response
+        if hasattr(action_result, "add_debug_data"):
+            action_result.add_debug_data({"r_status_code": response.status_code})
+            action_result.add_debug_data({"r_text": response.text})
+
+        if response.status_code == 200:
+            try:
+                resp_json = response.json()
+                action_result.add_data(resp_json)
+
+                summary = action_result.update_summary({})
+                summary["list_id"] = list_id
+                if isinstance(resp_json, dict):
+                    summary["list_name"] = resp_json.get("name", "")
+                    if "patterns" in resp_json:
+                        summary["total_entries"] = len(resp_json.get("patterns", []))
+
+                return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved list")
+            except Exception as e:
+                return action_result.set_status(phantom.APP_ERROR, f"Error parsing response. {self._get_error_message_from_exception(e)}")
+        else:
+            message = f"Error from server. Status Code: {response.status_code}"
+            try:
+                resp_json = response.json()
+                if "message" in resp_json:
+                    message = f"{message}, Message: {resp_json['message']}"
+            except Exception as e:
+                if response.text:
+                    message = f"{message}, Response: {response.text}"
+                else:
+                    message = f"{message}, Error parsing error response: {self._get_error_message_from_exception(e)}"
+
+            return action_result.set_status(phantom.APP_ERROR, message)
+
+    def _handle_update_list(self, param):
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        # Get parameters
+        endpoint = param.get(DLP_JSON_ENDPOINT)
+        list_id = self._validate_integers(action_result, param.get(DLP_JSON_LIST_ID), DLP_JSON_LIST_ID, allow_zero=True)
+        new_value = param.get(DLP_JSON_NEW_VALUE)
+
+        # Validate endpoint parameter is passed
+        if not endpoint:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide 'endpoint' parameter")
+
+        if list_id is None:
+            return action_result.get_status()
+
+        # Validate new_value parameter is passed
+        if not new_value:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide 'new_value' parameter")
+
+        # Parse new_value
+        try:
+            if isinstance(new_value, str):
+                data = json.loads(new_value)
+            else:
+                data = new_value
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"'new_value' must be valid JSON. Error: {self._get_error_message_from_exception(e)}"
+            )
+
+        # Build URL
+        config = self.get_config()
+        base_url = config[DLP_JSON_URL].strip("/")
+
+        if not endpoint.startswith("/"):
+            endpoint = f"/{endpoint}"
+
+        url = f"{base_url}{endpoint}/{list_id}"
+
+        # Make the REST call
+        headers = {"Content-Type": "application/json"}
+        try:
+            response = self._session.put(url, json=data, headers=headers, verify=self._verify, timeout=60)
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, f"Error connecting to server. {self._get_error_message_from_exception(e)}")
+
+        # Process response
+        if hasattr(action_result, "add_debug_data"):
+            action_result.add_debug_data({"r_status_code": response.status_code})
+            action_result.add_debug_data({"r_text": response.text})
+
+        if 200 <= response.status_code < 399:
+            try:
+                resp_json = response.json()
+                action_result.add_data(resp_json)
+            except Exception:
+                action_result.add_data({"text": response.text})
+
+            summary = action_result.update_summary({})
+            summary["list_id"] = list_id
+            summary["update_status"] = "success"
+
+            return action_result.set_status(phantom.APP_SUCCESS, "Successfully updated list")
+        else:
+            message = f"Error from server. Status Code: {response.status_code}"
+            try:
+                resp_json = response.json()
+                if "message" in resp_json:
+                    message = f"{message}, Message: {resp_json['message']}"
+            except Exception:
+                if response.text:
+                    message = f"{message}, Response: {response.text}"
+
+            return action_result.set_status(phantom.APP_ERROR, message)
+
     def _get_time_string(self):
         # function to separate on poll and poll now
         config = self.get_config()
@@ -847,6 +991,10 @@ class SymantecDLPConnector(BaseConnector):
             ret_val = self._handle_list_incidents(param)
         elif action == self.ACTION_ID_GET_INCIDENT:
             ret_val = self._handle_get_incident(param)
+        elif action == self.ACTION_ID_GET_LIST:
+            ret_val = self._handle_get_list(param)
+        elif action == self.ACTION_ID_UPDATE_LIST:
+            ret_val = self._handle_update_list(param)
         elif action == self.ACTION_ID_ON_POLL:
             ret_val = self._on_poll(param)
 

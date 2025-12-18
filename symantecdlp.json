@@ -3,9 +3,14 @@
     "name": "Symantec Data Loss Prevention",
     "description": "This app supports incident update and incident ingestion from Symantec Data Loss Prevention installation",
     "publisher": "Splunk",
+    "contributors": [
+      {
+        "name": "Andrei Irimia"
+      }
+    ],
     "type": "endpoint",
     "main_module": "symantecdlp_connector.py",
-    "app_version": "2.2.2",
+    "app_version": "2.3.0",
     "utctime_updated": "2025-09-24T19:33:57.790991Z",
     "package_name": "phantom_symantecdlp",
     "product_vendor": "Symantec",
@@ -969,7 +974,180 @@
                 }
             ],
             "versions": "EQ(*)"
-        },
+          },
+          {
+            "action": "get list",
+            "description": "Get a list from Symantec DLP",
+            "verbose": "Retrieves a list by making a GET request to the specified endpoint with the list ID.",
+            "type": "investigate",
+            "identifier": "get_list",
+            "read_only": true,
+            "parameters": {
+              "endpoint": {
+                "description": "API endpoint path",
+                "data_type": "string",
+                "order": 0,
+                "required": true
+              },
+              "list_id": {
+                "description": "ID of the list to retrieve",
+                "data_type": "numeric",
+                "order": 1,
+                "required": true,
+                "primary": true
+              }
+            },
+            "output": [
+              {
+                "data_path": "action_result.status",
+                "data_type": "string",
+                "example_values": [
+                  "success",
+                  "failed"
+                ]
+              },
+              {
+                "data_path": "action_result.parameter.endpoint",
+                "data_type": "string",
+                "example_values": [
+                  "/ProtectManager/webservices/v2/senderRecipientPattern"
+                ]
+              },
+              {
+                "data_path": "action_result.parameter.list_id",
+                "data_type": "numeric",
+                "example_values": [
+                  123
+                ]
+              },
+              {
+                "data_path": "action_result.data.*",
+                "data_type": "string"
+              },
+              {
+                "data_path": "action_result.summary.list_id",
+                "data_type": "numeric"
+              },
+              {
+                "data_path": "action_result.summary.list_name",
+                "data_type": "string"
+              },
+              {
+                "data_path": "action_result.summary.total_entries",
+                "data_type": "numeric"
+              },
+              {
+                "data_path": "action_result.message",
+                "data_type": "string"
+              },
+              {
+                "data_path": "summary.total_objects",
+                "data_type": "numeric"
+              },
+              {
+                "data_path": "summary.total_objects_successful",
+                "data_type": "numeric"
+              }
+            ],
+            "render": {
+              "type": "table"
+            },
+            "versions": "EQ(*)"
+          },
+          {
+            "action": "update list",
+            "description": "Update a list in Symantec DLP",
+            "verbose": "Updates a list by making a PUT request to the specified endpoint with the list ID. The 'new_value' parameter should be a JSON object containing the complete list data.",
+            "type": "generic",
+            "identifier": "update_list",
+            "read_only": false,
+            "parameters": {
+              "endpoint": {
+                "description": "API endpoint path",
+                "data_type": "string",
+                "order": 0,
+                "required": true
+              },
+              "list_id": {
+                "description": "ID of the list to update",
+                "data_type": "numeric",
+                "order": 1,
+                "required": true,
+                "primary": true,
+                "contains": [
+                  "dlp list id"
+                ]
+              },
+              "new_value": {
+                "description": "JSON object containing the new data for the list",
+                "data_type": "string",
+                "order": 2,
+                "required": true
+              }
+            },
+            "output": [
+              {
+                "data_path": "action_result.status",
+                "data_type": "string",
+                "example_values": [
+                  "success",
+                  "failed"
+                ]
+              },
+              {
+                "data_path": "action_result.parameter.endpoint",
+                "data_type": "string",
+                "example_values": [
+                  "/ProtectManager/webservices/v2/senderRecipientPattern"
+                ]
+              },
+              {
+                "data_path": "action_result.parameter.list_id",
+                "data_type": "numeric",
+                "contains": [
+                  "dlp list id"
+                ],
+                "example_values": [
+                  123
+                ]
+              },
+              {
+                "data_path": "action_result.parameter.new_value",
+                "data_type": "string",
+                "example_values": [
+                  "{\"name\": \"This is a test name\", \"description\": \"This is a test description\", \"ruleType\": 4, \"ipAddresses\": [], \"urlDomains\": [], \"userPatterns\": [\"user1@example.com\", \"user2@example.com\", \"user3@example.com\"]}"
+                ]
+              },
+              {
+                "data_path": "action_result.data.*",
+                "data_type": "string"
+              },
+              {
+                "data_path": "action_result.summary.list_id",
+                "data_type": "numeric"
+              },
+              {
+                "data_path": "action_result.summary.update_status",
+                "data_type": "string"
+              },
+              {
+                "data_path": "action_result.message",
+                "data_type": "string"
+              },
+              {
+                "data_path": "summary.total_objects",
+                "data_type": "numeric"
+              },
+              {
+                "data_path": "summary.total_objects_successful",
+                "data_type": "numeric"
+              }
+            ],
+            "render": {
+              "type": "table"
+            },
+            "versions": "EQ(*)"
+          },
         {
             "action": "on poll",
             "description": "Action handler for the ingest functionality",

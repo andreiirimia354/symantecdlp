@@ -1,7 +1,7 @@
 # Symantec Data Loss Prevention
 
 Publisher: Splunk <br>
-Connector Version: 2.2.2 <br>
+Connector Version: 2.3.0 <br>
 Product Vendor: Symantec <br>
 Product Name: Symantec DLP <br>
 Minimum Product Version: 6.3.0
@@ -80,6 +80,8 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [update incident](#action-update-incident) - Update a DLP incident <br>
 [list incidents](#action-list-incidents) - List DLP incidents <br>
 [get incident](#action-get-incident) - Get DLP incident <br>
+[get list](#action-get-list) - Get a list from Symantec DLP <br>
+[update list](#action-update-list) - Update a list in Symantec DLP <br>
 [on poll](#action-on-poll) - Action handler for the ingest functionality
 
 ## action: 'test connectivity'
@@ -270,6 +272,69 @@ action_result.summary | string | | |
 action_result.message | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
+
+## action: 'get list'
+
+Get a list from Symantec DLP
+
+Type: **investigate** <br>
+Read only: **True**
+
+Retrieves a list by making a GET request to the specified endpoint with the list ID.
+
+#### Action Parameters
+
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**endpoint** | required | API endpoint path | string | |
+**list_id** | required | ID of the list to retrieve | numeric | |
+
+#### Action Output
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.endpoint | string | | /ProtectManager/webservices/v2/senderRecipientPattern |
+action_result.parameter.list_id | numeric | | 123 |
+action_result.data.\* | string | | |
+action_result.summary.list_id | numeric | | |
+action_result.summary.list_name | string | | |
+action_result.summary.total_entries | numeric | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
+
+## action: 'update list'
+
+Update a list in Symantec DLP
+
+Type: **generic** <br>
+Read only: **False**
+
+Updates a list by making a PUT request to the specified endpoint with the list ID. The 'new_value' parameter should be a JSON object containing the complete list data.
+
+#### Action Parameters
+
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**endpoint** | required | API endpoint path | string | |
+**list_id** | required | ID of the list to update | numeric | `dlp list id` |
+**new_value** | required | JSON object containing the new data for the list | string | |
+
+#### Action Output
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.endpoint | string | | /ProtectManager/webservices/v2/senderRecipientPattern |
+action_result.parameter.list_id | numeric | `dlp list id` | 123 |
+action_result.parameter.new_value | string | | {"name": "This is a test name", "description": "This is a test description", "ruleType": 4, "ipAddresses": [], "urlDomains": [], "userPatterns": ["user1@example.com", "user2@example.com", "user3@example.com"]} |
+action_result.data.\* | string | | |
+action_result.summary.list_id | numeric | | |
+action_result.summary.update_status | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
 
 ## action: 'on poll'
 
