@@ -1366,7 +1366,7 @@
         "wheel": [
             {
                 "module": "attrs",
-                "input_file": "wheels/py3/attrs-25.4.0-py3-none-any.whl"
+                "input_file": "wheels/py3/attrs-26.1.0-py3-none-any.whl"
             },
             {
                 "module": "isodate",
@@ -1382,7 +1382,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2026.1.post1-py2.py3-none-any.whl"
             },
             {
                 "module": "requests_file",
@@ -1402,7 +1402,7 @@
         "wheel": [
             {
                 "module": "attrs",
-                "input_file": "wheels/py3/attrs-25.4.0-py3-none-any.whl"
+                "input_file": "wheels/py3/attrs-26.1.0-py3-none-any.whl"
             },
             {
                 "module": "isodate",
@@ -1414,11 +1414,11 @@
             },
             {
                 "module": "platformdirs",
-                "input_file": "wheels/py3/platformdirs-4.5.1-py3-none-any.whl"
+                "input_file": "wheels/py3/platformdirs-4.9.4-py3-none-any.whl"
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2026.1.post1-py2.py3-none-any.whl"
             },
             {
                 "module": "requests_file",
