@@ -23,7 +23,7 @@
     "logo_dark": "logo_symantec_dark.svg",
     "license": "Copyright (c) 2018-2026 Splunk Inc.",
     "latest_tested_versions": [
-        "Symantec DLP version 15.8"
+        "Symantec DLP version 25.1"
     ],
     "configuration": {
         "url": {
@@ -1017,7 +1017,7 @@
                     "data_path": "action_result.parameter.list_id",
                     "data_type": "numeric",
                     "example_values": [
-                        123
+                        508
                     ]
                 },
                 {
@@ -1025,28 +1025,120 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "numeric",
+                    "example_values": [
+                        508
+                    ],
+                    "column_name": "List ID",
+                    "column_order": 0,
+                    "contains": [
+                        "dlp list id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "EXAMPLE LIST NAME"
+                    ],
+                    "column_name": "Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.ruleType",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ],
+                    "column_name": "Rule Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedBy.id",
+                    "data_type": "numeric",
+                    "example_values": [
+                        504
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedBy.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "testuser"
+                    ],
+                    "column_name": "Modified By",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Example List Description"
+                    ],
+                    "column_name": "Description",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2026-03-31T11:03:15"
+                    ],
+                    "column_name": "Modified Date",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.userPatterns.*",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.list_id",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        508
+                    ],
+                    "contains": [
+                        "dlp list id"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.list_name",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "EXAMPLE LIST NAME"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.total_entries",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully retrieved list"
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1108,14 +1200,14 @@
                         "dlp list id"
                     ],
                     "example_values": [
-                        123
+                        508
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.new_value",
                     "data_type": "string",
                     "example_values": [
-                        "{\"name\": \"This is a test name\", \"description\": \"This is a test description\", \"ruleType\": 4, \"ipAddresses\": [], \"urlDomains\": [], \"userPatterns\": [\"user1@example.com\", \"user2@example.com\", \"user3@example.com\"]}"
+                        "{\"name\": \"EXAMPLE LIST NAME\", \"description\": \"Example List Description\", \"ruleType\": 4, \"userPatterns\": [\"test@example.com\", \"example@example.com\"]}"
                     ]
                 },
                 {
@@ -1123,24 +1215,113 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "numeric",
+                    "example_values": [
+                        508
+                    ],
+                    "column_name": "List ID",
+                    "column_order": 0,
+                    "contains": [
+                        "dlp list id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "EXAMPLE LIST NAME"
+                    ],
+                    "column_name": "Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.ruleType",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ],
+                    "column_name": "Rule Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedBy.id",
+                    "data_type": "numeric",
+                    "example_values": [
+                        504
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedBy.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "testuser"
+                    ],
+                    "column_name": "Modified By",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Example List Description"
+                    ],
+                    "column_name": "Description",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.modifiedDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2026-03-31T11:31:56"
+                    ],
+                    "column_name": "Modified Date",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.userPatterns.*",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.list_id",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        508
+                    ],
+                    "contains": [
+                        "dlp list id"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.update_status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully updated list"
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {

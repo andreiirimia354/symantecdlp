@@ -295,14 +295,22 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failed |
 action_result.parameter.endpoint | string | | /ProtectManager/webservices/v2/senderRecipientPattern |
-action_result.parameter.list_id | numeric | | 123 |
+action_result.parameter.list_id | numeric | | 508 |
 action_result.data.\* | string | | |
-action_result.summary.list_id | numeric | | |
-action_result.summary.list_name | string | | |
-action_result.summary.total_entries | numeric | | |
-action_result.message | string | | |
-summary.total_objects | numeric | | |
-summary.total_objects_successful | numeric | | |
+action_result.data.\*.id | numeric | `dlp list id` | 508 |
+action_result.data.\*.name | string | | EXAMPLE LIST NAME |
+action_result.data.\*.ruleType | numeric | | 4 |
+action_result.data.\*.modifiedBy.id | numeric | | 504 |
+action_result.data.\*.modifiedBy.name | string | | testuser |
+action_result.data.\*.description | string | | Example List Description |
+action_result.data.\*.modifiedDate | string | | 2026-03-31T11:03:15 |
+action_result.data.\*.userPatterns.\* | string | | test@example.com |
+action_result.summary.list_id | numeric | `dlp list id` | 508 |
+action_result.summary.list_name | string | | EXAMPLE LIST NAME |
+action_result.summary.total_entries | numeric | | 1 |
+action_result.message | string | | Successfully retrieved list |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'update list'
 
@@ -327,14 +335,22 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failed |
 action_result.parameter.endpoint | string | | /ProtectManager/webservices/v2/senderRecipientPattern |
-action_result.parameter.list_id | numeric | `dlp list id` | 123 |
-action_result.parameter.new_value | string | | {"name": "This is a test name", "description": "This is a test description", "ruleType": 4, "ipAddresses": [], "urlDomains": [], "userPatterns": ["user1@example.com", "user2@example.com", "user3@example.com"]} |
+action_result.parameter.list_id | numeric | `dlp list id` | 508 |
+action_result.parameter.new_value | string | | {"name": "EXAMPLE LIST NAME", "description": "Example List Description", "ruleType": 4, "userPatterns": ["test@example.com", "example@example.com"]} |
 action_result.data.\* | string | | |
-action_result.summary.list_id | numeric | | |
-action_result.summary.update_status | string | | |
-action_result.message | string | | |
-summary.total_objects | numeric | | |
-summary.total_objects_successful | numeric | | |
+action_result.data.\*.id | numeric | `dlp list id` | 508 |
+action_result.data.\*.name | string | | EXAMPLE LIST NAME |
+action_result.data.\*.ruleType | numeric | | 4 |
+action_result.data.\*.modifiedBy.id | numeric | | 504 |
+action_result.data.\*.modifiedBy.name | string | | testuser |
+action_result.data.\*.description | string | | Example List Description |
+action_result.data.\*.modifiedDate | string | | 2026-03-31T11:31:56 |
+action_result.data.\*.userPatterns.\* | string | | test@example.com |
+action_result.summary.list_id | numeric | `dlp list id` | 508 |
+action_result.summary.update_status | string | | success |
+action_result.message | string | | Successfully updated list |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'on poll'
 
